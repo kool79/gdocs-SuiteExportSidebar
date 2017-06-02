@@ -1,0 +1,76 @@
+==================================================
+ 
+ INTEGRATION WITH TestSuiteXmlConverterWebApp
+ 
+==================================================
+the TestSuiteXmlConverterWebApp is used as web-service which allows to extract data from doc where this Sidebar will live 
+Link to TestSuiteXmlConverterWebApp: (src) https://script.google.com/d/1CCwgE0z_r4vsat9njZzbAej_kerLOMU_wWtO710VFZODUpWQSRKMkAXf/edit?usp=drive_web
+
+Open File - Project Properties - Script properties, click add row (this can be done by script owner only) and add: 
+SUITE_EXPORTER_URI = <linlk to doc-xml web-app converter>  
+SUITE_EXPORTER_URI = https://script.google.com/macros/s/AKfycbznFM02eHM0uxckM7eJzVVPPDfLjwKUVwtS1wWSxDiSjdVxRIk/exec
+
+!!!! link must not be /dev. It must be /exec because users will not have acces
+
+
+
+
+
+======================================
+
+  INTEGRATION WITH SPREADSHEET:
+
+======================================
+
+1. Add this libarry to yor spreadsheet script (you must have acces to this library):
+    1.1 open Menu>resource>libraries
+    1.2 Put value: MkwcWqAjyMwEFLuasVmEoZm57b6M-YZoP  (this window :: File-Project Properties-info - project key)
+        OR value 1cJW5yhPAraEm7famCFFWeGglCMio9O-KprwO6EbjDJV1SpTAYv3BVGB5 (this window :: File-Project Properties-info - script id)
+           into "Find a library" field and click 'select'. Library should appear in table
+    Set value in "Identifier" column to: SuiteExportSidebar   
+    Select latest version in 'version' column and activate developer mode to debug. NOTE: for read-only access only selected version will be used. dev mode ignored
+    click Save
+    
+2. copy/paste code below to script (Check that you have only one onOpen() function in your files)
+
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+/**
+ * This code use custom library "SuiteExportSidebar", see menu Resources > libraries
+ * to find lib you should paste script id there: 1cJW5yhPAraEm7famCFFWeGglCMio9O-KprwO6EbjDJV1SpTAYv3BVGB5
+ * and you must have at least read access to it
+ * library source here: 
+ * https://script.google.com/a/astoundcommerce.com/d/1cJW5yhPAraEm7famCFFWeGglCMio9O-KprwO6EbjDJV1SpTAYv3BVGB5/edit?usp=drive_web
+ * https://script.google.com/d/1cJW5yhPAraEm7famCFFWeGglCMio9O-KprwO6EbjDJV1SpTAYv3BVGB5/edit?usp=drive_web
+ *
+ * NOTE: for read-only access only selected version will be used. dev mode ignored
+ * 
+ */
+function onOpen(e) {
+  
+  SpreadsheetApp.getUi().createAddonMenu()
+  .addItem("Open sidebar","showExportSidebar") 
+  .addToUi();
+  
+  
+  SpreadsheetApp.getUi().createMenu("-=Export=-")
+  .addItem("Open sidebar","showExportSidebar") 
+  .addToUi();
+  
+  
+  //showSidebar();
+};
+
+function showExportSidebar(){
+  SuiteExportSidebar.show();
+}
+
+function exportXmlToGDrive(dataType){  
+  return SuiteExportSidebar.exportXmlToGDrive(dataType);
+}
+
+
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
